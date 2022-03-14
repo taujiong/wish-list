@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "paths": {
+      "*": ["libs/*/src"]
+    }
+  },
+  "include": ["libs/*/src"]
+}
