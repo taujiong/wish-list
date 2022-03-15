@@ -3,7 +3,7 @@ import { Wish } from 'contract';
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Text, View } from 'react-native';
 import NButton from '../components/NButton';
-import { renderWishItem } from '../components/WishItem';
+import WishItem from '../components/WishItem';
 import { RootStackParamList } from '../rn-navigation';
 
 type WishListProps = NativeStackScreenProps<RootStackParamList, 'Start'>;
@@ -29,10 +29,10 @@ const ListPage = ({ navigation }: WishListProps) => {
 
   useEffect(() => {
     setWishes(
-      new Array(50).fill(0).map((_, index) => ({
+      new Array(10).fill(0).map((_, index) => ({
         id: index.toString(),
-        content: 'wish' + index,
-        lastUpdateAt: 'time' + index,
+        content: '很希望去看XXX的音乐会，将生活的烦恼都抛在脑后' + index,
+        lastUpdateAt: `昨天 ${index}0:49`,
       }))
     );
   }, []);
@@ -41,7 +41,7 @@ const ListPage = ({ navigation }: WishListProps) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#f8f8f8',
         alignItems: 'center',
       }}
     >
@@ -51,10 +51,11 @@ const ListPage = ({ navigation }: WishListProps) => {
         <FlatList
           style={{
             width: '100%',
+            marginTop: 16,
           }}
           data={wishes}
           keyExtractor={(item) => item.id}
-          renderItem={renderWishItem}
+          renderItem={({ item }) => <WishItem {...item} />}
         />
       )}
 
