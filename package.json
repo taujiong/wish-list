@@ -4,7 +4,8 @@
   "scripts": {
     "preinstall": "node ./scripts/preinstall.js",
     "prepare": "node ./scripts/prepare.js",
-    "dev:api": "pnpm dev -r --filter api"
+    "dev:api": "pnpm dev -r --filter api",
+    "dev:rn": "pnpm dev -r --filter rn"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
