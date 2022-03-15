@@ -24,8 +24,7 @@ const WishEdit = ({ navigation }: WishEditProps) => {
           title='确认'
           disabled={!wish}
           onPress={() => {
-            createWish(wish).then((data) => {
-              console.log(data);
+            createWish(wish).then(() => {
               navigation.navigate('WishList');
             });
           }}

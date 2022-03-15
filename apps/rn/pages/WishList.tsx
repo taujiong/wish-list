@@ -1,6 +1,7 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Wish } from 'contract';
-import { useLayoutEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FlatList, Image, Text, View } from 'react-native';
 import NButton from '../components/NButton';
 import WishItem from '../components/WishItem';
@@ -28,12 +29,16 @@ const EmptyWish = (
 const ListPage = ({ navigation }: WishListProps) => {
   const [wishes, setWishes] = useState<Wish[]>([]);
 
-  useLayoutEffect(() => {
+  const refreshWishes = useCallback(() => {
     fetchWishes().then((data) => {
-      console.log(data);
       setWishes(data);
     });
-  });
+  }, []);
+
+  // ATTENTION: route navigation in react native is not the same as it in web
+  // when navigate back, it will not refresh its state and call useEffect() method
+  // solution see https://reactnavigation.org/docs/navigation-lifecycle
+  useFocusEffect(refreshWishes);
 
   return (
     <View
