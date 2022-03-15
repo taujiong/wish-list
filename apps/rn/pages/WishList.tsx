@@ -1,10 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Wish } from 'contract';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { FlatList, Image, Text, View } from 'react-native';
 import NButton from '../components/NButton';
 import WishItem from '../components/WishItem';
 import { RootStackParamList } from '../rn-navigation';
+import { fetchWishes } from '../services';
 
 type WishListProps = NativeStackScreenProps<RootStackParamList, 'Start'>;
 
@@ -27,15 +28,12 @@ const EmptyWish = (
 const ListPage = ({ navigation }: WishListProps) => {
   const [wishes, setWishes] = useState<Wish[]>([]);
 
-  useEffect(() => {
-    setWishes(
-      new Array(10).fill(0).map((_, index) => ({
-        id: index.toString(),
-        content: '很希望去看XXX的音乐会，将生活的烦恼都抛在脑后' + index,
-        lastUpdateAt: `昨天 ${index}0:49`,
-      }))
-    );
-  }, []);
+  useLayoutEffect(() => {
+    fetchWishes().then((data) => {
+      console.log(data);
+      setWishes(data);
+    });
+  });
 
   return (
     <View
@@ -60,7 +58,7 @@ const ListPage = ({ navigation }: WishListProps) => {
       )}
 
       <NButton
-        onPress={() => navigation.navigate('Start')}
+        onPress={() => navigation.navigate('WishEdit')}
         text='写下你的愿望'
         sx={{
           button: {
