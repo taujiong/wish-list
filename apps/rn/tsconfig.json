@@ -8,6 +8,6 @@
     "resolveJsonModule": true,
     "target": "ESNext"
   },
-  "include": ["pages", "components", "services"]
+  "include": ["src"]
   // "exclude": ["babel.config.js", "metro.config.js", "jest.config.js"]
 }

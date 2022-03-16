@@ -5,8 +5,8 @@ import { useCallback, useState } from 'react';
 import { FlatList, Image, Text, View } from 'react-native';
 import NButton from '../components/NButton';
 import WishItem from '../components/WishItem';
-import { RootStackParamList } from '../rn-navigation';
 import { fetchWishes } from '../services';
+import { RootStackParamList } from '../types/rn-navigation';
 
 type WishListProps = NativeStackScreenProps<RootStackParamList, 'Start'>;
 
@@ -21,7 +21,7 @@ const EmptyWish = (
       marginBottom: 20,
     }}
   >
-    <Image source={require('../assets/empty-state.png')} />
+    <Image source={require('../../assets/empty-state.png')} />
     <Text>你还没有愿望哦</Text>
   </View>
 );

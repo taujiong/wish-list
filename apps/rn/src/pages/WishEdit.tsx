@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useLayoutEffect, useState } from 'react';
 import { Button, KeyboardAvoidingView, Text, TextInput } from 'react-native';
-import { RootStackParamList } from '../rn-navigation';
 import { createWish } from '../services';
+import { RootStackParamList } from '../types/rn-navigation';
 
 type WishEditProps = NativeStackScreenProps<RootStackParamList, 'WishEdit'>;
 

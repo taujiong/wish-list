@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, Text, View } from 'react-native';
 import NButton from '../components/NButton';
-import { RootStackParamList } from '../rn-navigation';
+import { RootStackParamList } from '../types/rn-navigation';
 
 type StartProps = NativeStackScreenProps<RootStackParamList, 'Start'>;
 
@@ -30,7 +30,7 @@ const StartPage = ({ navigation }: StartProps) => (
     </Text>
 
     <Image
-      source={require('../assets/demo.png')}
+      source={require('../../assets/demo.png')}
       style={{
         marginBottom: 60,
       }}
