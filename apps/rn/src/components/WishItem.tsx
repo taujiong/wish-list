@@ -1,11 +1,12 @@
 import { Wish } from 'contract';
 import { Text, View } from 'react-native';
+import { calculateDate } from '../services/moment';
+
+const DOT_POSITION = 24;
 
 type WishItemProps = Wish;
 
 const WishItem = ({ content, lastUpdateAt }: WishItemProps) => {
-  const dotPosition = 24;
-
   return (
     <View
       style={{
@@ -24,7 +25,7 @@ const WishItem = ({ content, lastUpdateAt }: WishItemProps) => {
             height: 8,
             borderRadius: 9999,
             backgroundColor: '#0000001a',
-            top: dotPosition,
+            top: DOT_POSITION,
           }}
         />
 
@@ -35,7 +36,7 @@ const WishItem = ({ content, lastUpdateAt }: WishItemProps) => {
             height: '100%',
             position: 'absolute',
             left: 3,
-            top: dotPosition + 8,
+            top: DOT_POSITION + 8,
             backgroundColor: '#0000001a',
           }}
         />
@@ -58,7 +59,7 @@ const WishItem = ({ content, lastUpdateAt }: WishItemProps) => {
             marginBottom: 8,
           }}
         >
-          {lastUpdateAt}
+          {calculateDate(lastUpdateAt)}
         </Text>
 
         <Text

@@ -10,7 +10,7 @@ export const createWish = (content: string) =>
     },
     body: JSON.stringify({
       content,
-      lastUpdateAt: JSON.stringify(new Date()),
+      lastUpdateAt: new Date().toISOString(),
     }),
   }).then((data) => data.json());
 
