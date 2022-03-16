@@ -20,7 +20,6 @@ router.get('/:id', (ctx) => {
 
 router.post('/', (ctx) => {
   const data = ctx.request.body as WishEditDto;
-  console.log(data);
 
   const newWish = {
     id: id.toString(),

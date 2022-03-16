@@ -1,13 +1,27 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useLayoutEffect, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { Button, KeyboardAvoidingView, Text, TextInput } from 'react-native';
-import { createWish } from '../services';
+import { createWish, updateWish } from '../services';
 import { RootStackParamList } from '../types/rn-navigation';
 
 type WishEditProps = NativeStackScreenProps<RootStackParamList, 'WishEdit'>;
 
-const WishEdit = ({ navigation }: WishEditProps) => {
+const WishEdit = ({ navigation, route }: WishEditProps) => {
+  const [id, setId] = useState<string>();
   const [wish, setWish] = useState('');
+
+  const createOrUpdateWish = useCallback(
+    id === undefined ? createWish : updateWish.bind(null, id),
+    [id]
+  );
+
+  const updateParams = useCallback(() => {
+    setId(route.params?.id);
+    setWish(route.params?.value ?? '');
+  }, [route]);
+
+  useFocusEffect(updateParams);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,7 +38,7 @@ const WishEdit = ({ navigation }: WishEditProps) => {
           title='确认'
           disabled={!wish}
           onPress={() => {
-            createWish(wish).then(() => {
+            createOrUpdateWish(wish).then(() => {
               navigation.navigate('WishList');
             });
           }}
@@ -47,6 +61,7 @@ const WishEdit = ({ navigation }: WishEditProps) => {
         multiline
         textAlignVertical='top'
         placeholder='将你的愿望说给云听'
+        value={wish}
         onChangeText={(e) => setWish(e)}
         style={{
           fontSize: 16,

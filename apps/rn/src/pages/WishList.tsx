@@ -2,13 +2,20 @@ import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Wish } from 'contract';
 import { useCallback, useState } from 'react';
-import { FlatList, Image, Text, View } from 'react-native';
+import {
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import NButton from '../components/NButton';
 import WishItem from '../components/WishItem';
-import { fetchWishes } from '../services';
+import { deleteWish, fetchWishes } from '../services';
 import { RootStackParamList } from '../types/rn-navigation';
 
-type WishListProps = NativeStackScreenProps<RootStackParamList, 'Start'>;
+type WishListProps = NativeStackScreenProps<RootStackParamList, 'WishList'>;
 
 const EmptyWish = (
   <View
@@ -35,6 +42,27 @@ const ListPage = ({ navigation }: WishListProps) => {
     });
   }, []);
 
+  const deleteWishInternal = (id: string) => {
+    deleteWish(id).then(() => {
+      fetchWishes().then((data) => {
+        setWishes(data);
+      });
+    });
+  };
+
+  const askForDelete = (id: string) =>
+    Alert.alert('放弃愿望', '你确定要放弃这个愿望吗？', [
+      {
+        text: '坚持一下',
+        style: 'cancel',
+      },
+      {
+        text: '忍痛放弃',
+        style: 'destructive',
+        onPress: () => deleteWishInternal(id),
+      },
+    ]);
+
   // ATTENTION: route navigation in react native is not the same as it in web
   // when navigate back, it will not refresh its state and call useEffect() method
   // solution see https://reactnavigation.org/docs/navigation-lifecycle
@@ -58,7 +86,20 @@ const ListPage = ({ navigation }: WishListProps) => {
           }}
           data={wishes}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <WishItem {...item} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('WishEdit', {
+                  id: item.id,
+                  value: item.content,
+                })
+              }
+              onLongPress={() => askForDelete(item.id)}
+              delayLongPress={1500} // response later to avoid an unexpected click
+            >
+              <WishItem {...item} />
+            </TouchableOpacity>
+          )}
         />
       )}
 

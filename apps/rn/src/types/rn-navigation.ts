@@ -2,5 +2,10 @@
 export type RootStackParamList = {
   Start: undefined;
   WishList: undefined;
-  WishEdit: undefined;
+  WishEdit:
+    | {
+        id: string;
+        value: string;
+      }
+    | undefined;
 };
