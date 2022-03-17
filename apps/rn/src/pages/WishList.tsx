@@ -1,9 +1,10 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Wish } from 'contract';
-import { useCallback, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import {
   Alert,
+  Button,
   FlatList,
   Image,
   Text,
@@ -33,8 +34,9 @@ const EmptyWish = (
   </View>
 );
 
-const ListPage = ({ navigation }: WishListProps) => {
+const ListPage = ({ navigation, route }: WishListProps) => {
   const [wishes, setWishes] = useState<Wish[]>([]);
+  const isGuest = route.params?.isGuest;
 
   const refreshWishes = useCallback(() => {
     fetchWishes().then((data) => {
@@ -63,6 +65,27 @@ const ListPage = ({ navigation }: WishListProps) => {
       },
     ]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions(
+      isGuest
+        ? { title: `${route.params?.userName}的愿望清单` }
+        : {
+            title: '愿望清单',
+            headerRight: () => (
+              <Button
+                title='客态'
+                onPress={() => {
+                  navigation.push('WishList', {
+                    isGuest: true,
+                    userName: 'Viva佳薇',
+                  });
+                }}
+              />
+            ),
+          }
+    );
+  });
+
   // ATTENTION: route navigation in react native is not the same as it in web
   // when navigate back, it will not refresh its state and call useEffect() method
   // solution see https://reactnavigation.org/docs/navigation-lifecycle
@@ -86,33 +109,39 @@ const ListPage = ({ navigation }: WishListProps) => {
           }}
           data={wishes}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('WishEdit', {
-                  id: item.id,
-                  value: item.content,
-                })
-              }
-              onLongPress={() => askForDelete(item.id)}
-              delayLongPress={1500} // response later to avoid an unexpected click
-            >
+          renderItem={({ item }) =>
+            isGuest ? (
               <WishItem {...item} />
-            </TouchableOpacity>
-          )}
+            ) : (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('WishEdit', {
+                    id: item.id,
+                    value: item.content,
+                  })
+                }
+                onLongPress={() => askForDelete(item.id)}
+                delayLongPress={1500} // response later to avoid an unexpected click
+              >
+                <WishItem {...item} />
+              </TouchableOpacity>
+            )
+          }
         />
       )}
 
-      <NButton
-        onPress={() => navigation.navigate('WishEdit')}
-        text='写下你的愿望'
-        sx={{
-          button: {
-            marginTop: 10,
-            marginBottom: 32,
-          },
-        }}
-      />
+      {!isGuest && (
+        <NButton
+          onPress={() => navigation.navigate('WishEdit')}
+          text='写下你的愿望'
+          sx={{
+            button: {
+              marginTop: 10,
+              marginBottom: 32,
+            },
+          }}
+        />
+      )}
     </View>
   );
 };
