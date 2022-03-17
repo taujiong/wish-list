@@ -1,15 +1,21 @@
 /**
  * calculate required string according to current date
  */
-export function calculateDate(date: Date) {
-  const now = new Date();
+export function calculateDate(date: Date, base: Date = new Date()) {
+  const now = base;
 
   if (isToday(date, now)) {
-    return `今天 ${date.getHours()}:${date.getMinutes()}`;
+    return `今天 ${date.getHours().toString().padStart(2, '0')}:${date
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}`;
   }
 
   if (isYesterday(date, now)) {
-    return `昨天 ${date.getHours()}:${date.getMinutes()}`;
+    return `昨天 ${date.getHours().toString().padStart(2, '0')}:${date
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}`;
   }
 
   if (isThisYear(date, now)) {

@@ -1,7 +1,8 @@
 module.exports = {
-  extends: ['alloy'],
+  extends: ['alloy', 'alloy/typescript', 'plugin:jest/recommended'],
   env: {
     node: true,
+    jest: true,
   },
   rules: {},
 };
