@@ -1,64 +1,51 @@
-import { Wish, WishEditDto } from 'contract';
 import Router from 'koa-router';
-
-const wishes: Wish[] = [];
-let id = 0;
+import { WishRepo } from '../models';
 
 const router = new Router({
   prefix: '/wishes',
 });
 
-router.get('/', (ctx) => {
+// TODO: order, pagination should comes from frontend
+router.get('/', async (ctx) => {
+  const wishes = await WishRepo.findAll({
+    order: [['lastUpdateAt', 'DESC']],
+  });
   ctx.body = wishes;
 });
 
-router.get('/:id', (ctx) => {
+router.get('/:id', async (ctx) => {
   const id = ctx.params.id;
-  ctx.body =
-    wishes.find((wish) => wish.id === id) ?? 'Your wish does not exist';
+  const wish = await WishRepo.findOne({
+    where: {
+      id,
+    },
+  });
+  ctx.body = wish ?? 'Your wish does not exist';
 });
 
-router.post('/', (ctx) => {
-  const data = ctx.request.body as WishEditDto;
-
-  const newWish = {
-    id: id.toString(),
-    ...data,
-  };
-  wishes.push(newWish);
-  id++;
+router.post('/', async (ctx) => {
+  const newWish = await WishRepo.create(ctx.request.body);
   ctx.body = newWish;
 });
 
-router.put('/:id', (ctx) => {
+router.put('/:id', async (ctx) => {
   const id = ctx.params.id;
-  const targetWishIndex = wishes.findIndex((wish) => wish.id === id);
+  await WishRepo.update(ctx.request.body, {
+    where: { id },
+  });
 
-  if (targetWishIndex === -1) {
-    ctx.body = 'Your wish does not exist';
-    return;
-  }
-
-  const data = ctx.request.body as WishEditDto;
-  const updatedWish = {
-    ...wishes[targetWishIndex],
-    ...data,
-  };
-  wishes.splice(targetWishIndex, 1, updatedWish);
+  const updatedWish = await WishRepo.findOne({
+    where: { id },
+  });
 
   ctx.body = updatedWish;
 });
 
-router.delete('/:id', (ctx) => {
+router.delete('/:id', async (ctx) => {
   const id = ctx.params.id;
-  const targetWishIndex = wishes.findIndex((wish) => wish.id === id);
-
-  if (targetWishIndex === -1) {
-    ctx.body = 'Your wish does not exist';
-    return;
-  }
-
-  wishes.splice(targetWishIndex, 1);
+  await WishRepo.destroy({
+    where: { id },
+  });
 });
 
 export default router;

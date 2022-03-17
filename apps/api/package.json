@@ -2,17 +2,21 @@
   "name": "api",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev src/index.ts"
+    "dev": "ts-node-dev -r dotenv/config src/index.ts"
   },
   "dependencies": {
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
-    "koa-router": "^10.1.1"
+    "koa-router": "^10.1.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.17.0"
   },
   "devDependencies": {
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.6",
     "@types/koa-router": "^7.4.4",
+    "dotenv": "^16.0.0",
     "ts-node-dev": "^1.1.8"
   }
 }
