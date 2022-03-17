@@ -1,9 +1,7 @@
 /**
- * calculate an iso format date string according to current date
- * @param isoDate the iso format date string
+ * calculate required string according to current date
  */
-export function calculateDate(isoDate: string) {
-  const date = new Date(isoDate); // TODO: error handler
+export function calculateDate(date: Date) {
   const now = new Date();
 
   if (isToday(date, now)) {
@@ -29,6 +27,7 @@ export function isToday(targetDate: Date, now: Date = new Date()) {
   );
 }
 
+// a better method: https://stackoverflow.com/questions/4944750/how-to-subtract-date-time-in-javascript
 export function isYesterday(targetDate: Date, now: Date = new Date()) {
   const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
   return isToday(targetDate, yesterday);
