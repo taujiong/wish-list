@@ -10,6 +10,7 @@ type WishEditProps = NativeStackScreenProps<RootStackParamList, 'WishEdit'>;
 const WishEdit = ({ navigation, route }: WishEditProps) => {
   const [id, setId] = useState<string>();
   const [wish, setWish] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const createOrUpdateWish = useCallback(
     id === undefined ? createWish : updateWish.bind(null, id),
@@ -36,16 +37,18 @@ const WishEdit = ({ navigation, route }: WishEditProps) => {
       headerRight: () => (
         <Button
           title='确认'
-          disabled={!wish}
+          disabled={!wish || loading}
           onPress={() => {
+            setLoading(true);
             createOrUpdateWish(wish).then(() => {
+              setLoading(false);
               navigation.navigate('WishList');
             });
           }}
         />
       ),
     });
-  }, [wish]);
+  }, [wish, loading]);
 
   return (
     <KeyboardAvoidingView

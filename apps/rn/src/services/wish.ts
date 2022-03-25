@@ -1,6 +1,6 @@
 import { Wish } from 'contract';
 
-const API_BASE_PATH = 'http://192.168.1.185:3000/api/wishes';
+const API_BASE_PATH = 'http://192.168.43.205:3000/api/wishes';
 
 // NEED_IMPROVE
 // wish.lastUpdateAt in api was a string, but I need a Date
