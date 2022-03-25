@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import NButton from '../components/NButton';
 import WishItem from '../components/WishItem';
-import { deleteWish, fetchWishes } from '../services';
+import { deleteWish, fetchWishes, handleError } from '../services';
 import { RootStackParamList } from '../types/rn-navigation';
 
 type WishListProps = NativeStackScreenProps<RootStackParamList, 'WishList'>;
@@ -39,17 +39,21 @@ const ListPage = ({ navigation, route }: WishListProps) => {
   const isGuest = route.params?.isGuest;
 
   const refreshWishes = useCallback(() => {
-    fetchWishes().then((data) => {
-      setWishes(data);
-    });
+    fetchWishes()
+      .then((data) => {
+        setWishes(data);
+      })
+      .catch(handleError);
   }, []);
 
   const deleteWishInternal = (id: string) => {
-    deleteWish(id).then(() => {
-      fetchWishes().then((data) => {
-        setWishes(data);
-      });
-    });
+    deleteWish(id)
+      .then(() => {
+        fetchWishes().then((data) => {
+          setWishes(data);
+        });
+      })
+      .catch(handleError);
   };
 
   const askForDelete = (id: string) =>

@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useCallback, useLayoutEffect, useState } from 'react';
 import { Button, KeyboardAvoidingView, Text, TextInput } from 'react-native';
-import { createWish, updateWish } from '../services';
+import { createWish, handleError, updateWish } from '../services';
 import { RootStackParamList } from '../types/rn-navigation';
 
 type WishEditProps = NativeStackScreenProps<RootStackParamList, 'WishEdit'>;
@@ -40,10 +40,12 @@ const WishEdit = ({ navigation, route }: WishEditProps) => {
           disabled={!wish || loading}
           onPress={() => {
             setLoading(true);
-            createOrUpdateWish(wish).then(() => {
-              setLoading(false);
-              navigation.navigate('WishList');
-            });
+            createOrUpdateWish(wish)
+              .then(() => {
+                setLoading(false);
+                navigation.navigate('WishList');
+              })
+              .catch(handleError);
           }}
         />
       ),
